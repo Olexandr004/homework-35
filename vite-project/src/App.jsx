@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { addTodo, toggleTodo, sortTodos } from './actions';
+import { addTodo, toggleTodo, sortTodos, deleteTodo } from './actions';
 
 function App() {
     const [inputValue, setInputValue] = useState('');
@@ -18,6 +18,10 @@ function App() {
         }
     };
 
+    const handleDeleteTodo = (id) => {
+        dispatch(deleteTodo(id));
+    };
+
     return (
         <div className="todo-list">
             <h1>Todo List</h1>
@@ -26,13 +30,15 @@ function App() {
                 <button onClick={() => dispatch(sortTodos('alphabetical'))}>Сортирувати по алфавіту</button>
             </div>
             <ul>
-                {todos.map((todo, index) => (
-                    <li
-                        key={index}
-                        style={{ textDecoration: todo.completed ? 'line-through' : 'none' }}
-                        onClick={() => dispatch(toggleTodo(index))}
-                    >
-                        {todo.text}
+                {todos.map((todo) => (
+                    <li key={todo.id}>
+                        <span
+                            style={{ textDecoration: todo.completed ? 'line-through' : 'none', cursor: 'pointer' }}
+                            onClick={() => dispatch(toggleTodo(todo.id))}
+                        >
+                            {todo.text}
+                        </span>
+                        <button onClick={() => handleDeleteTodo(todo.id)}>Видалити</button>
                     </li>
                 ))}
             </ul>
